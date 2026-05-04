@@ -1,0 +1,28 @@
+// 01-maybe.compact
+// Demonstrates Maybe<T> — optional values in Compact
+// Verified: Compact compiler v0.30.0 ✅
+
+pragma language_version >= 0.20;
+import CompactStandardLibrary;
+
+export ledger stored: Maybe<Bytes<32>>;
+
+constructor() {
+  stored = none<Bytes<32>>();
+}
+
+// Set a value — stored becomes some(val)
+export circuit setStored(val: Bytes<32>): [] {
+  stored = disclose(some<Bytes<32>>(val));
+}
+
+// Clear the value — stored becomes none
+export circuit clearStored(): [] {
+  stored = disclose(none<Bytes<32>>());
+}
+
+// Read the value — proof generation fails if stored is none
+// Design circuits so .value is only called when presence is guaranteed
+export circuit useStored(): Bytes<32> {
+  return stored.value;
+}

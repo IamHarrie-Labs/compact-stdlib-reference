@@ -1,0 +1,30 @@
+// 04-persistent-hash.compact
+// Demonstrates persistentHash and pad — domain-separated hashing
+// Verified: Compact compiler v0.30.0 ✅
+
+pragma language_version >= 0.20;
+import CompactStandardLibrary;
+
+export ledger commitment: Bytes<32>;
+
+witness secretValue(): Bytes<32>;
+
+// Store a commitment to a private value
+// The domain prefix "myapp:commit:" ensures this hash cannot be reused
+// to satisfy constraints from a different circuit (domain separation)
+export circuit commit(): [] {
+  const h = persistentHash<Vector<2, Bytes<32>>>([
+    pad(32, "myapp:commit:"),
+    secretValue()
+  ]);
+  commitment = disclose(h);
+}
+
+// Prove knowledge of the original secret without revealing it
+export circuit verify(): [] {
+  const h = persistentHash<Vector<2, Bytes<32>>>([
+    pad(32, "myapp:commit:"),
+    secretValue()
+  ]);
+  assert(h == commitment, "Proof invalid: secret does not match commitment");
+}

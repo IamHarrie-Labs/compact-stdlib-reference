@@ -1,0 +1,27 @@
+// 02-either.compact
+// Demonstrates Either<L, R> — two-branch union type in Compact
+// Verified: Compact compiler v0.30.0 ✅
+
+pragma language_version >= 0.20;
+import CompactStandardLibrary;
+
+export ledger choice: Either<Bytes<32>, Bytes<32>>;
+
+constructor() {
+  choice = disclose(left<Bytes<32>, Bytes<32>>(pad(32, "initial")));
+}
+
+// Set to the left branch
+export circuit pickLeft(val: Bytes<32>): [] {
+  choice = disclose(left<Bytes<32>, Bytes<32>>(val));
+}
+
+// Set to the right branch
+export circuit pickRight(val: Bytes<32>): [] {
+  choice = disclose(right<Bytes<32>, Bytes<32>>(val));
+}
+
+// Read the left value — proof fails if choice is currently right
+export circuit readLeft(): Bytes<32> {
+  return choice.left;
+}

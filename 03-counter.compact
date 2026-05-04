@@ -1,0 +1,26 @@
+// 03-counter.compact
+// Demonstrates Counter — monotonically incrementing ledger type
+// Verified: Compact compiler v0.30.0 ✅
+
+pragma language_version >= 0.20;
+import CompactStandardLibrary;
+
+export ledger seq: Counter;
+export ledger lastKey: Bytes<32>;
+
+witness secretKey(): Bytes<32>;
+
+constructor() {
+  seq.increment(1);
+}
+
+// Derive a new key using the sequence number as a domain separator
+// Cast Counter to Field for use in hash inputs
+export circuit nextKey(): [] {
+  const key = persistentHash<Vector<2, Bytes<32>>>([
+    seq as Field as Bytes<32>,
+    secretKey()
+  ]);
+  lastKey = disclose(key);
+  seq.increment(1);
+}

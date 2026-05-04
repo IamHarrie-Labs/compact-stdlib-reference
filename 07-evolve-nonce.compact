@@ -1,0 +1,26 @@
+// 07-evolve-nonce.compact
+// Demonstrates evolveNonce and shieldedBurnAddress
+// Verified: Compact compiler v0.30.0 ✅
+//
+// evolveNonce signature: (nonce: Uint<128>, tag: Bytes<32>) -> Bytes<32>
+// NOTE: first argument is Uint<128>, not Bytes<32> — a common mistake
+
+pragma language_version >= 0.20;
+import CompactStandardLibrary;
+
+export ledger nonce: Uint<128>;
+export ledger nonceHash: Bytes<32>;
+export ledger burnAddr: Either<ZswapCoinPublicKey, ContractAddress>;
+
+constructor() {
+  nonce = disclose(0 as Uint<128>);
+  nonceHash = pad(32, "initial:");
+  burnAddr = disclose(shieldedBurnAddress());
+}
+
+// Rotate nonce — advances the counter and derives a new nonce hash
+// Use nonceHash as a nullifier or unique per-action commitment
+export circuit rotateNonce(): [] {
+  nonceHash = disclose(evolveNonce(nonce, pad(32, "rotate:")));
+  nonce = disclose((nonce + 1) as Uint<128>);
+}

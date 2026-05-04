@@ -1,0 +1,25 @@
+// 06-kernel-types.compact
+// Demonstrates ZswapCoinPublicKey, ContractAddress, nativeToken, tokenType
+// Verified: Compact compiler v0.30.0 ✅
+
+pragma language_version >= 0.20;
+import CompactStandardLibrary;
+
+export ledger registeredKey: ZswapCoinPublicKey;
+export ledger nativeT: Bytes<32>;
+export ledger customT: Bytes<32>;
+
+// Register the caller's claimed public key
+// WARNING: ownPublicKey() is unconstrained — this does NOT prove ownership.
+// See the companion article on the ownPublicKey() vulnerability.
+export circuit register(): [] {
+  registeredKey = disclose(ownPublicKey());
+}
+
+// Derive token type identifiers
+// nativeToken() — the NIGHT token identifier
+// tokenType(prefix, addr) — custom token bound to a contract address
+export circuit setTokenTypes(tokenContract: ContractAddress): [] {
+  nativeT = disclose(nativeToken());
+  customT = disclose(tokenType(pad(32, "token:"), tokenContract));
+}
