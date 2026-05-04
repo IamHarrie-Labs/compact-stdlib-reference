@@ -1,7 +1,7 @@
 # Compact Standard Library — Verified Reference Examples
 
 Companion code for the tutorial:
-**[Compact Standard Library: A Verified Reference to Every Export](DEVTO_URL_HERE)**
+**[Compact Standard Library: A Verified Reference to Every Export](https://dev.to/iamharrie/compact-standard-library-a-verified-reference-to-every-export-10k5)**
 
 Submitted for the [Midnight Eclipse Content Bounty Program](https://forum.midnight.network/t/midnight-content-bounty-program-eclipse/1148) — Issue [#293](https://github.com/midnightntwrk/contributor-hub/issues/293).
 
