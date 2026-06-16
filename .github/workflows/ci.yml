@@ -1,0 +1,51 @@
+name: Compile
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  compile:
+    name: Compile all Compact contracts
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Compact toolchain
+        run: |
+          curl --proto '=https' --tlsv1.2 -LsSf \
+            https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
+          echo "$HOME/.compact/bin" >> $GITHUB_PATH
+
+      - name: Update to latest compiler
+        run: |
+          compact update
+          echo "=== Compiler version ==="
+          compact --version
+
+      - name: Compile every .compact file
+        run: |
+          mkdir -p managed
+          status=0
+          for src in *.compact; do
+            name="${src%.compact}"
+            out="managed/${name}"
+            mkdir -p "${out}"
+            echo "=== Compiling ${src} ==="
+            if compact compile "${src}" "${out}"; then
+              echo "✅ ${src} compiled"
+            else
+              echo "❌ ${src} failed"
+              status=1
+            fi
+          done
+          exit $status
+
+      - name: Upload compiled artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-contracts
+          path: managed/

@@ -1,11 +1,12 @@
 // 05-persistent-commit.compact
 // Demonstrates persistentCommit — append-only commitment accumulator
-// Verified: Compact compiler v0.30.0 ✅
+// Verified: Compact compiler v0.31.0 ✅
 //
-// NOTE: MerkleTree<N,T> exists as a type but CANNOT be stored in ledger state.
-// Use a Bytes<32> root with persistentCommit for append-only logs.
+// NOTE: In v0.31.0, MerkleTree<N,T> can also live in ledger state
+// (see 09-merkletree-ledger.compact). persistentCommit remains the
+// right choice when you only need a single accumulator root.
 
-pragma language_version >= 0.20;
+pragma language_version >= 0.23;
 import CompactStandardLibrary;
 
 // Store the Merkle accumulator root, not the full tree

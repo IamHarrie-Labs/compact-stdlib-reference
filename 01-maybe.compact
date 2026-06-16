@@ -1,8 +1,8 @@
 // 01-maybe.compact
 // Demonstrates Maybe<T> — optional values in Compact
-// Verified: Compact compiler v0.30.0 ✅
+// Verified: Compact compiler v0.31.0 ✅
 
-pragma language_version >= 0.20;
+pragma language_version >= 0.23;
 import CompactStandardLibrary;
 
 export ledger stored: Maybe<Bytes<32>>;

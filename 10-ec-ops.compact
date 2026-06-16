@@ -1,0 +1,29 @@
+// 10-ec-ops.compact
+// Demonstrates elliptic curve operations on JubjubPoint
+// Verified: Compact compiler v0.31.0 ✅
+//
+// JubjubPoint is opaque — no accessible .x or .y. But you can operate on it:
+//   ecMulGenerator(s) — derive a point from a scalar (G * s)
+//   ecAdd(a, b)       — add two points (a + b)
+//   ecMul(p, s)       — multiply a point by a scalar (p * s)
+//
+// Enough for Pedersen-style commitments and key derivation at the application
+// layer. Scalars are Field values; the curve structure stays opaque.
+
+pragma language_version >= 0.23;
+import CompactStandardLibrary;
+
+// Derive a point from a scalar: result = G * s
+export circuit derive(s: Field): JubjubPoint {
+  return ecMulGenerator(s);
+}
+
+// Add two points: result = a + b
+export circuit add(a: JubjubPoint, b: JubjubPoint): JubjubPoint {
+  return ecAdd(a, b);
+}
+
+// Multiply a point by a scalar: result = p * s
+export circuit mul(p: JubjubPoint, s: Field): JubjubPoint {
+  return ecMul(p, s);
+}

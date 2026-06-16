@@ -1,11 +1,11 @@
 // 07-evolve-nonce.compact
 // Demonstrates evolveNonce and shieldedBurnAddress
-// Verified: Compact compiler v0.30.0 ✅
+// Verified: Compact compiler v0.31.0 ✅
 //
 // evolveNonce signature: (nonce: Uint<128>, tag: Bytes<32>) -> Bytes<32>
 // NOTE: first argument is Uint<128>, not Bytes<32> — a common mistake
 
-pragma language_version >= 0.20;
+pragma language_version >= 0.23;
 import CompactStandardLibrary;
 
 export ledger nonce: Uint<128>;

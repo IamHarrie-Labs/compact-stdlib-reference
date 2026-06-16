@@ -1,8 +1,8 @@
 // 06-kernel-types.compact
 // Demonstrates ZswapCoinPublicKey, ContractAddress, nativeToken, tokenType
-// Verified: Compact compiler v0.30.0 ✅
+// Verified: Compact compiler v0.31.0 ✅
 
-pragma language_version >= 0.20;
+pragma language_version >= 0.23;
 import CompactStandardLibrary;
 
 export ledger registeredKey: ZswapCoinPublicKey;

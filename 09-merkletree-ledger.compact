@@ -1,0 +1,19 @@
+// 09-merkletree-ledger.compact
+// Demonstrates MerkleTree<N, T> as a ledger field with .insert()
+// Verified: Compact compiler v0.31.0 ✅
+//
+// In v0.31.0 the compiler accepts MerkleTree<N, T> as a ledger field.
+// Older articles claim this is rejected as an ADT — that note no longer
+// applies. Use MerkleTree when you want leaf-level operations; use
+// persistentCommit (see 05-) when you only need a single accumulator root.
+
+pragma language_version >= 0.23;
+import CompactStandardLibrary;
+
+// Depth-8 tree of 32-byte leaves
+export ledger tree: MerkleTree<8, Bytes<32>>;
+
+// Insert a leaf — the compiler handles the bookkeeping
+export circuit add(leaf: Bytes<32>): [] {
+  tree.insert(disclose(leaf));
+}

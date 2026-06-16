@@ -1,0 +1,25 @@
+// 08-counter-decrement.compact
+// Demonstrates Counter.decrement(n) — saturates at zero
+// Verified: Compact compiler v0.31.0 ✅
+//
+// decrement(n) is the counterpart to increment(n). It saturates at zero,
+// so calling it on a counter already at zero is a no-op, not an error.
+
+pragma language_version >= 0.23;
+import CompactStandardLibrary;
+
+export ledger seq: Counter;
+
+constructor() {
+  seq.increment(5);
+}
+
+// Step forward
+export circuit up(): [] {
+  seq.increment(1);
+}
+
+// Step backward — saturates at zero
+export circuit down(): [] {
+  seq.decrement(1);
+}

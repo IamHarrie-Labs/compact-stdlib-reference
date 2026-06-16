@@ -1,0 +1,43 @@
+// 11-block-time.compact
+// Demonstrates blockTimeLt / Lte / Gt / Gte — block-time comparisons
+// Verified: Compact compiler v0.31.0 ✅
+//
+// getBlockTime / getBlockNumber / getEpoch don't exist (unbound identifiers).
+// The real API is comparison-based: rather than asking "what time is it?"
+// you ask "is the current time relative to this target?". That fits the ZK
+// model — the circuit proves a relationship to the current block time
+// without revealing the value itself.
+//
+//   blockTimeLt(t)  — true while now < t   (window still open)
+//   blockTimeLte(t) — true while now <= t  (inclusive)
+//   blockTimeGt(t)  — true once now > t    (deadline has passed)
+//   blockTimeGte(t) — true once now >= t   (inclusive)
+
+pragma language_version >= 0.23;
+import CompactStandardLibrary;
+
+export ledger deadline: Uint<64>;
+
+// Store a deadline target
+export circuit setDeadline(target: Uint<64>): [] {
+  deadline = disclose(target);
+}
+
+// True while current block time is less than target
+export circuit isOpen(target: Uint<64>): Boolean {
+  return blockTimeLt(disclose(target));
+}
+
+// True once current block time is greater than target
+export circuit hasPassed(target: Uint<64>): Boolean {
+  return blockTimeGt(disclose(target));
+}
+
+// Inclusive variants
+export circuit atOrBefore(target: Uint<64>): Boolean {
+  return blockTimeLte(disclose(target));
+}
+
+export circuit atOrAfter(target: Uint<64>): Boolean {
+  return blockTimeGte(disclose(target));
+}
